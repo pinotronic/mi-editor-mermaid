@@ -68,3 +68,66 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+```mermaid
+graph TD
+classDef title fill:#002855,color:#fff,stroke:none,font-size:20px
+classDef success fill:#dfffdd,color:#006400,stroke:#006400
+classDef error fill:#ffe6e6,color:#8b0000,stroke:#8b0000
+    A[📁 Raíz del proyecto]:::title
+    A ---> B[📁 src/]:::title
+    A -->C[📁 public/]:::title
+    A --> D[📁 build/]:::title
+    A --> E[package.json]
+    A --> F[README.md]
+    B --> B1[App.js]
+    B --> B2[index.js]
+    B --> B3[App.css]
+    B --> B4[index.css]
+    B --> B5[logo.svg]
+    B --> B6[reportWebVitals.js]
+    B --> B7[setupTests.js]
+    B ---> B8[📁 components/]:::title
+    B ---> B9[📁 core/]:::title
+    B ---> B10[📁 hooks/]:::title
+    B8 ---> B8a[📁 DiagramCanvas/]:::title
+    B8 --> B8b[📁 ExportPanel/]:::title
+    B8 --> B8c[📁 Toolbar/]:::title
+    B8a --> B8a1[CustomNode.js]
+    B8a --> B8a2[DiagramCanvas.js]
+    B8b --> B8b1[ExportPanel.js]
+    B8c --> B8c1[Toolbar.js]
+    B9 --> B9a[📁 constants/]:::title
+    B9 --> B9b[📁 services/]:::title
+    B9 --> B9c[📁 types/]:::title
+    B9a --> B9a1[NodeTemplates.js]
+    B9b --> B9b1[MermaidExporter.js]
+    B9c --> B9c1[DiagramTypes.js]
+    B10 --> B10a[useDiagramState.js]
+```
+
+```mermaid
+flowchart TD
+    INICIO([Inicio])
+    INICIO --> LOGIN{¿Usuario autenticado?}
+    LOGIN -- Sí --> CARGA_APP[Renderiza App.js]
+    LOGIN -- No --> FIN[Fin]
+
+    CARGA_APP --> CARGA_COMPONENTES{¿Qué componente selecciona el usuario?}
+    CARGA_COMPONENTES -- "DiagramCanvas" --> DIAGRAM[Renderiza DiagramCanvas]
+    CARGA_COMPONENTES -- "ExportPanel" --> EXPORT[Renderiza ExportPanel]
+    CARGA_COMPONENTES -- "Toolbar" --> TOOLBAR[Renderiza Toolbar]
+
+    DIAGRAM --> ACCIONES_DIAGRAMA[Usuario edita diagrama]
+    EXPORT --> ACCIONES_EXPORT[Usuario exporta diagrama]
+    TOOLBAR --> ACCIONES_TOOLBAR[Usuario usa herramientas]
+
+    ACCIONES_DIAGRAMA --> CARGA_COMPONENTES
+    ACCIONES_EXPORT --> CARGA_COMPONENTES
+    ACCIONES_TOOLBAR --> CARGA_COMPONENTES
+
+    CARGA_COMPONENTES ---> LOGOUT{¿Cerrar sesión?}
+    LOGOUT -- Sí --> FIN
+    LOGOUT -- No --> CARGA_COMPONENTES
+```
+

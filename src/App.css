@@ -1,38 +1,300 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Estilos principales de la aplicación */
+.app {
   display: flex;
-  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Contenedor principal del canvas */
+.canvas-container {
+  flex: 1;
+  position: relative;
+  background-color: #f8f9fa;
+  overflow: hidden;
+}
+
+/* Indicador de zona de drop */
+.drop-indicator {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 2px dashed #3b82f6;
+  border-radius: 8px;
+  padding: 16px 24px;
+  text-align: center;
+  color: #3b82f6;
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.canvas-container:hover .drop-indicator {
+  opacity: 1;
+}
+
+/* Barra de estado */
+.status-bar {
+  position: absolute;
+  bottom: 0;
+  left: 240px; /* Ancho de la toolbar */
+  right: 0;
+  height: 32px;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0 16px;
+  font-size: 12px;
+  color: #6b7280;
+  z-index: 10;
 }
 
-.App-link {
-  color: #61dafb;
+/* Estilos para el canvas de ReactFlow */
+.react-flow__background {
+  background-color: #f8f9fa;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.react-flow__controls {
+  bottom: 50px !important;
+  left: 20px !important;
+}
+
+.react-flow__minimap {
+  bottom: 50px !important;
+  right: 20px !important;
+}
+
+/* Estilos para nodos personalizados con zona de arrastre ampliada */
+.custom-node {
+  position: relative;
+  z-index: 1;
+}
+
+.custom-node:hover {
+  z-index: 10 !important;
+}
+
+/* Estilos específicos para subgraphs */
+.subgraph-node {
+  position: relative;
+  z-index: 0;
+}
+
+.subgraph-node:hover {
+  z-index: 5 !important;
+}
+
+/* Zona de arrastre visible para todos los elementos */
+.custom-node:hover::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  background-color: rgba(148, 163, 184, 0.05);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Mejorar handles - más grandes y visibles */
+.custom-node .react-flow__handle,
+.subgraph-node .react-flow__handle {
+  width: 10px;
+  height: 10px;
+  background-color: #3b82f6;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+
+.custom-node:hover .react-flow__handle,
+.subgraph-node:hover .react-flow__handle,
+.react-flow__node.selected .react-flow__handle {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Handles cuando están conectando */
+.react-flow__handle-connecting {
+  background-color: #10b981 !important;
+  opacity: 1 !important;
+  transform: scale(1.2) !important;
+}
+
+.react-flow__handle-valid {
+  background-color: #10b981 !important;
+  opacity: 1 !important;
+  transform: scale(1.2) !important;
+}
+
+/* Feedback visual mejorado para arrastre */
+.react-flow__node.dragging {
+  opacity: 0.9;
+  transform: scale(1.02);
+  z-index: 1000 !important;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+}
+
+/* Estilos para nodos seleccionados - sin outline que cause confusión */
+.react-flow__node.selected {
+  z-index: 100 !important;
+}
+
+/* Eliminar el outline problemático y usar solo el border interno */
+.react-flow__node.selected .custom-node,
+.react-flow__node.selected .subgraph-node {
+  /* El borde de selección ahora se maneja dentro del componente */
+}
+
+/* Evitar selección múltiple visual */
+.react-flow__nodesselection,
+.react-flow__selection {
+  display: none !important;
+}
+
+.react-flow__selectionpane {
+  display: none !important;
+}
+
+/* Cursor mejorado */
+.custom-node,
+.subgraph-node {
+  cursor: move;
+}
+
+.custom-node .node-content,
+.subgraph-node > div {
+  cursor: move;
+}
+
+/* Evitar selección de texto */
+.react-flow__node {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Área de arrastre mejorada para subgraphs */
+.subgraph-node:hover::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px dashed #3b82f6;
+  border-radius: 8px;
+  background-color: rgba(59, 130, 246, 0.03);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Botones de eliminar mejorados */
+.custom-node button,
+.subgraph-node button {
+  transition: all 0.2s ease;
+}
+
+.custom-node button:hover,
+.subgraph-node button:hover {
+  transform: scale(1.1);
+  background-color: #dc2626 !important;
+}
+
+.custom-node .react-flow__handle.react-flow__handle-top {
+  top: -4px;
+}
+
+.custom-node .react-flow__handle.react-flow__handle-bottom {
+  bottom: -4px;
+}
+
+.custom-node .react-flow__handle.react-flow__handle-left {
+  left: -4px;
+}
+
+.custom-node .react-flow__handle.react-flow__handle-right {
+  right: -4px;
+}
+
+/* Animaciones de hover para botones de nodos en toolbar */
+.node-button {
+  transition: all 0.2s ease;
+}
+
+.node-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.node-button:active {
+  transform: translateY(0);
+}
+
+/* Estilos para elementos seleccionados */
+.react-flow__node.selected {
+  box-shadow: 0 0 0 2px #3b82f6 !important;
+}
+
+.react-flow__edge.selected {
+  z-index: 1000;
+}
+
+.react-flow__edge.selected path {
+  stroke: #3b82f6 !important;
+  stroke-width: 3px !important;
+}
+
+/* Estilos responsivos */
+@media (max-width: 1024px) {
+  .app {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .canvas-container {
+    height: calc(100vh - 200px);
   }
+  
+  .status-bar {
+    left: 0;
+  }
+  
+  .drop-indicator {
+    font-size: 12px;
+    padding: 12px 16px;
+  }
+}
+
+/* Mejoras de accesibilidad */
+.custom-node:focus-visible,
+.node-button:focus-visible,
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Transiciones suaves globales */
+* {
+  box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  transition: all 0.2s ease;
 }
